@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Data.Entity;
 
 namespace DataBaseManager
 {
@@ -20,9 +21,22 @@ namespace DataBaseManager
     /// </summary>
     public partial class MainWindow : Window
     {
+        Sklep_papierniczyEntities context = new Sklep_papierniczyEntities();
+        CollectionViewSource klienciViewSource;
+        CollectionViewSource transakcjeViewSource;
         public MainWindow()
         {
             InitializeComponent();
+            klienciViewSource = ((CollectionViewSource)(FindResource("klienciViewSource")));
+            transakcjeViewSource = ((CollectionViewSource)(FindResource("klienciTransakcjeViewSource")));
+            DataContext = this; 
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            context.Klienci.Load();
+
+            klienciViewSource.Source = context.Klienci.Local;
         }
     }
 }
