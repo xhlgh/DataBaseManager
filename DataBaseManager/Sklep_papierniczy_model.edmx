@@ -1,0 +1,490 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Sklep_papierniczyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Dostawcy">
+          <Key>
+            <PropertyRef Name="id_dostawcy" />
+          </Key>
+          <Property Name="id_dostawcy" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nazwa_firmy" Type="varchar" MaxLength="50" />
+          <Property Name="miasto" Type="varchar" MaxLength="50" />
+          <Property Name="kraj" Type="varchar" MaxLength="50" />
+          <Property Name="telefon" Type="char" MaxLength="9" />
+        </EntityType>
+        <EntityType Name="Dostawy">
+          <Key>
+            <PropertyRef Name="id_dostawy" />
+          </Key>
+          <Property Name="id_dostawy" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_produktu" Type="int" />
+          <Property Name="ilosc" Type="decimal" Precision="10" Scale="0" />
+          <Property Name="data_dostawy" Type="date" Nullable="false" />
+          <Property Name="cena_zakupu" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="cena_netto" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="cena_brutto" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Kategoria">
+          <Key>
+            <PropertyRef Name="id_kategorii" />
+          </Key>
+          <Property Name="id_kategorii" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nazwa_kategorii" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Klienci">
+          <Key>
+            <PropertyRef Name="id_klienta" />
+          </Key>
+          <Property Name="id_klienta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="imie" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="nazwisko" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="telefon" Type="char" MaxLength="9" />
+        </EntityType>
+        <EntityType Name="Pracownicy">
+          <Key>
+            <PropertyRef Name="id_pracownika" />
+          </Key>
+          <Property Name="id_pracownika" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="imie" Type="varchar" MaxLength="50" />
+          <Property Name="nazwisko" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="pesel" Type="char" MaxLength="11" Nullable="false" />
+          <Property Name="stanowisko" Type="varchar" MaxLength="50" />
+          <Property Name="data_zatrudnienia" Type="date" Nullable="false" />
+          <Property Name="telefon" Type="char" MaxLength="9" />
+        </EntityType>
+        <EntityType Name="Produkty">
+          <Key>
+            <PropertyRef Name="id_produktu" />
+          </Key>
+          <Property Name="id_produktu" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nazwa" Type="varchar" MaxLength="50" />
+          <Property Name="ilosc" Type="decimal" Precision="10" Scale="0" />
+          <Property Name="cena_brutto" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="id_kategorii" Type="int" />
+          <Property Name="id_dostawcy" Type="int" />
+        </EntityType>
+        <EntityType Name="Transakcje">
+          <Key>
+            <PropertyRef Name="id_transakcji" />
+          </Key>
+          <Property Name="id_transakcji" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_produktu" Type="int" Nullable="false" />
+          <Property Name="cena_brutto" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="ilosc" Type="decimal" Precision="10" Scale="0" />
+          <Property Name="data_transakcji" Type="date" Nullable="false" />
+          <Property Name="id_klienta" Type="int" />
+          <Property Name="id_pracownika" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_id_dostawcy">
+          <End Role="Dostawcy" Type="Self.Dostawcy" Multiplicity="0..1" />
+          <End Role="Produkty" Type="Self.Produkty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dostawcy">
+              <PropertyRef Name="id_dostawcy" />
+            </Principal>
+            <Dependent Role="Produkty">
+              <PropertyRef Name="id_dostawcy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_id_kategorii">
+          <End Role="Kategoria" Type="Self.Kategoria" Multiplicity="0..1" />
+          <End Role="Produkty" Type="Self.Produkty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kategoria">
+              <PropertyRef Name="id_kategorii" />
+            </Principal>
+            <Dependent Role="Produkty">
+              <PropertyRef Name="id_kategorii" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_id_klienta">
+          <End Role="Klienci" Type="Self.Klienci" Multiplicity="0..1" />
+          <End Role="Transakcje" Type="Self.Transakcje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Klienci">
+              <PropertyRef Name="id_klienta" />
+            </Principal>
+            <Dependent Role="Transakcje">
+              <PropertyRef Name="id_klienta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_id_pracownika">
+          <End Role="Pracownicy" Type="Self.Pracownicy" Multiplicity="1" />
+          <End Role="Transakcje" Type="Self.Transakcje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pracownicy">
+              <PropertyRef Name="id_pracownika" />
+            </Principal>
+            <Dependent Role="Transakcje">
+              <PropertyRef Name="id_pracownika" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_id_produktu">
+          <End Role="Produkty" Type="Self.Produkty" Multiplicity="1" />
+          <End Role="Transakcje" Type="Self.Transakcje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produkty">
+              <PropertyRef Name="id_produktu" />
+            </Principal>
+            <Dependent Role="Transakcje">
+              <PropertyRef Name="id_produktu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_id_produktu1">
+          <End Role="Produkty" Type="Self.Produkty" Multiplicity="0..1" />
+          <End Role="Dostawy" Type="Self.Dostawy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produkty">
+              <PropertyRef Name="id_produktu" />
+            </Principal>
+            <Dependent Role="Dostawy">
+              <PropertyRef Name="id_produktu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Sklep_papierniczyModelStoreContainer">
+          <EntitySet Name="Dostawcy" EntityType="Self.Dostawcy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Dostawy" EntityType="Self.Dostawy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kategoria" EntityType="Self.Kategoria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Klienci" EntityType="Self.Klienci" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pracownicy" EntityType="Self.Pracownicy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Produkty" EntityType="Self.Produkty" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Transakcje" EntityType="Self.Transakcje" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_id_dostawcy" Association="Self.fk_id_dostawcy">
+            <End Role="Dostawcy" EntitySet="Dostawcy" />
+            <End Role="Produkty" EntitySet="Produkty" />
+          </AssociationSet>
+          <AssociationSet Name="fk_id_kategorii" Association="Self.fk_id_kategorii">
+            <End Role="Kategoria" EntitySet="Kategoria" />
+            <End Role="Produkty" EntitySet="Produkty" />
+          </AssociationSet>
+          <AssociationSet Name="fk_id_klienta" Association="Self.fk_id_klienta">
+            <End Role="Klienci" EntitySet="Klienci" />
+            <End Role="Transakcje" EntitySet="Transakcje" />
+          </AssociationSet>
+          <AssociationSet Name="fk_id_pracownika" Association="Self.fk_id_pracownika">
+            <End Role="Pracownicy" EntitySet="Pracownicy" />
+            <End Role="Transakcje" EntitySet="Transakcje" />
+          </AssociationSet>
+          <AssociationSet Name="fk_id_produktu" Association="Self.fk_id_produktu">
+            <End Role="Produkty" EntitySet="Produkty" />
+            <End Role="Transakcje" EntitySet="Transakcje" />
+          </AssociationSet>
+          <AssociationSet Name="fk_id_produktu1" Association="Self.fk_id_produktu1">
+            <End Role="Produkty" EntitySet="Produkty" />
+            <End Role="Dostawy" EntitySet="Dostawy" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Sklep_papierniczyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Dostawcy">
+          <Key>
+            <PropertyRef Name="id_dostawcy" />
+          </Key>
+          <Property Name="id_dostawcy" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nazwa_firmy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="miasto" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="kraj" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="telefon" Type="String" MaxLength="9" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Produkty" Relationship="Self.fk_id_dostawcy" FromRole="Dostawcy" ToRole="Produkty" />
+        </EntityType>
+        <EntityType Name="Dostawy">
+          <Key>
+            <PropertyRef Name="id_dostawy" />
+          </Key>
+          <Property Name="id_dostawy" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_produktu" Type="Int32" />
+          <Property Name="ilosc" Type="Decimal" Precision="10" Scale="0" />
+          <Property Name="data_dostawy" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="cena_zakupu" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="cena_netto" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="cena_brutto" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Produkty" Relationship="Self.fk_id_produktu1" FromRole="Dostawy" ToRole="Produkty" />
+        </EntityType>
+        <EntityType Name="Kategoria">
+          <Key>
+            <PropertyRef Name="id_kategorii" />
+          </Key>
+          <Property Name="id_kategorii" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nazwa_kategorii" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Produkty" Relationship="Self.fk_id_kategorii" FromRole="Kategoria" ToRole="Produkty" />
+        </EntityType>
+        <EntityType Name="Klienci">
+          <Key>
+            <PropertyRef Name="id_klienta" />
+          </Key>
+          <Property Name="id_klienta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="imie" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nazwisko" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="telefon" Type="String" MaxLength="9" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Transakcje" Relationship="Self.fk_id_klienta" FromRole="Klienci" ToRole="Transakcje" />
+        </EntityType>
+        <EntityType Name="Pracownicy">
+          <Key>
+            <PropertyRef Name="id_pracownika" />
+          </Key>
+          <Property Name="id_pracownika" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="imie" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="nazwisko" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="pesel" Type="String" MaxLength="11" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="stanowisko" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="data_zatrudnienia" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="telefon" Type="String" MaxLength="9" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Transakcje" Relationship="Self.fk_id_pracownika" FromRole="Pracownicy" ToRole="Transakcje" />
+        </EntityType>
+        <EntityType Name="Produkty">
+          <Key>
+            <PropertyRef Name="id_produktu" />
+          </Key>
+          <Property Name="id_produktu" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nazwa" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ilosc" Type="Decimal" Precision="10" Scale="0" />
+          <Property Name="cena_brutto" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="id_kategorii" Type="Int32" />
+          <Property Name="id_dostawcy" Type="Int32" />
+          <NavigationProperty Name="Dostawcy" Relationship="Self.fk_id_dostawcy" FromRole="Produkty" ToRole="Dostawcy" />
+          <NavigationProperty Name="Dostawy" Relationship="Self.fk_id_produktu1" FromRole="Produkty" ToRole="Dostawy" />
+          <NavigationProperty Name="Kategoria" Relationship="Self.fk_id_kategorii" FromRole="Produkty" ToRole="Kategoria" />
+          <NavigationProperty Name="Transakcje" Relationship="Self.fk_id_produktu" FromRole="Produkty" ToRole="Transakcje" />
+        </EntityType>
+        <EntityType Name="Transakcje">
+          <Key>
+            <PropertyRef Name="id_transakcji" />
+          </Key>
+          <Property Name="id_transakcji" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_produktu" Type="Int32" Nullable="false" />
+          <Property Name="cena_brutto" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ilosc" Type="Decimal" Precision="10" Scale="0" />
+          <Property Name="data_transakcji" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="id_klienta" Type="Int32" />
+          <Property Name="id_pracownika" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Klienci" Relationship="Self.fk_id_klienta" FromRole="Transakcje" ToRole="Klienci" />
+          <NavigationProperty Name="Pracownicy" Relationship="Self.fk_id_pracownika" FromRole="Transakcje" ToRole="Pracownicy" />
+          <NavigationProperty Name="Produkty" Relationship="Self.fk_id_produktu" FromRole="Transakcje" ToRole="Produkty" />
+        </EntityType>
+        <Association Name="fk_id_dostawcy">
+          <End Role="Dostawcy" Type="Self.Dostawcy" Multiplicity="0..1" />
+          <End Role="Produkty" Type="Self.Produkty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dostawcy">
+              <PropertyRef Name="id_dostawcy" />
+            </Principal>
+            <Dependent Role="Produkty">
+              <PropertyRef Name="id_dostawcy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_id_produktu1">
+          <End Role="Produkty" Type="Self.Produkty" Multiplicity="0..1" />
+          <End Role="Dostawy" Type="Self.Dostawy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produkty">
+              <PropertyRef Name="id_produktu" />
+            </Principal>
+            <Dependent Role="Dostawy">
+              <PropertyRef Name="id_produktu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_id_kategorii">
+          <End Role="Kategoria" Type="Self.Kategoria" Multiplicity="0..1" />
+          <End Role="Produkty" Type="Self.Produkty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kategoria">
+              <PropertyRef Name="id_kategorii" />
+            </Principal>
+            <Dependent Role="Produkty">
+              <PropertyRef Name="id_kategorii" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_id_klienta">
+          <End Role="Klienci" Type="Self.Klienci" Multiplicity="0..1" />
+          <End Role="Transakcje" Type="Self.Transakcje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Klienci">
+              <PropertyRef Name="id_klienta" />
+            </Principal>
+            <Dependent Role="Transakcje">
+              <PropertyRef Name="id_klienta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_id_pracownika">
+          <End Role="Pracownicy" Type="Self.Pracownicy" Multiplicity="1" />
+          <End Role="Transakcje" Type="Self.Transakcje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pracownicy">
+              <PropertyRef Name="id_pracownika" />
+            </Principal>
+            <Dependent Role="Transakcje">
+              <PropertyRef Name="id_pracownika" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_id_produktu">
+          <End Role="Produkty" Type="Self.Produkty" Multiplicity="1" />
+          <End Role="Transakcje" Type="Self.Transakcje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produkty">
+              <PropertyRef Name="id_produktu" />
+            </Principal>
+            <Dependent Role="Transakcje">
+              <PropertyRef Name="id_produktu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Sklep_papierniczyEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Dostawcy" EntityType="Self.Dostawcy" />
+          <EntitySet Name="Dostawy" EntityType="Self.Dostawy" />
+          <EntitySet Name="Kategoria" EntityType="Self.Kategoria" />
+          <EntitySet Name="Klienci" EntityType="Self.Klienci" />
+          <EntitySet Name="Pracownicy" EntityType="Self.Pracownicy" />
+          <EntitySet Name="Produkty" EntityType="Self.Produkty" />
+          <EntitySet Name="Transakcje" EntityType="Self.Transakcje" />
+          <AssociationSet Name="fk_id_dostawcy" Association="Self.fk_id_dostawcy">
+            <End Role="Dostawcy" EntitySet="Dostawcy" />
+            <End Role="Produkty" EntitySet="Produkty" />
+          </AssociationSet>
+          <AssociationSet Name="fk_id_produktu1" Association="Self.fk_id_produktu1">
+            <End Role="Produkty" EntitySet="Produkty" />
+            <End Role="Dostawy" EntitySet="Dostawy" />
+          </AssociationSet>
+          <AssociationSet Name="fk_id_kategorii" Association="Self.fk_id_kategorii">
+            <End Role="Kategoria" EntitySet="Kategoria" />
+            <End Role="Produkty" EntitySet="Produkty" />
+          </AssociationSet>
+          <AssociationSet Name="fk_id_klienta" Association="Self.fk_id_klienta">
+            <End Role="Klienci" EntitySet="Klienci" />
+            <End Role="Transakcje" EntitySet="Transakcje" />
+          </AssociationSet>
+          <AssociationSet Name="fk_id_pracownika" Association="Self.fk_id_pracownika">
+            <End Role="Pracownicy" EntitySet="Pracownicy" />
+            <End Role="Transakcje" EntitySet="Transakcje" />
+          </AssociationSet>
+          <AssociationSet Name="fk_id_produktu" Association="Self.fk_id_produktu">
+            <End Role="Produkty" EntitySet="Produkty" />
+            <End Role="Transakcje" EntitySet="Transakcje" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Sklep_papierniczyModelStoreContainer" CdmEntityContainer="Sklep_papierniczyEntities">
+          <EntitySetMapping Name="Dostawcy">
+            <EntityTypeMapping TypeName="Sklep_papierniczyModel.Dostawcy">
+              <MappingFragment StoreEntitySet="Dostawcy">
+                <ScalarProperty Name="id_dostawcy" ColumnName="id_dostawcy" />
+                <ScalarProperty Name="nazwa_firmy" ColumnName="nazwa_firmy" />
+                <ScalarProperty Name="miasto" ColumnName="miasto" />
+                <ScalarProperty Name="kraj" ColumnName="kraj" />
+                <ScalarProperty Name="telefon" ColumnName="telefon" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Dostawy">
+            <EntityTypeMapping TypeName="Sklep_papierniczyModel.Dostawy">
+              <MappingFragment StoreEntitySet="Dostawy">
+                <ScalarProperty Name="id_dostawy" ColumnName="id_dostawy" />
+                <ScalarProperty Name="id_produktu" ColumnName="id_produktu" />
+                <ScalarProperty Name="ilosc" ColumnName="ilosc" />
+                <ScalarProperty Name="data_dostawy" ColumnName="data_dostawy" />
+                <ScalarProperty Name="cena_zakupu" ColumnName="cena_zakupu" />
+                <ScalarProperty Name="cena_netto" ColumnName="cena_netto" />
+                <ScalarProperty Name="cena_brutto" ColumnName="cena_brutto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kategoria">
+            <EntityTypeMapping TypeName="Sklep_papierniczyModel.Kategoria">
+              <MappingFragment StoreEntitySet="Kategoria">
+                <ScalarProperty Name="id_kategorii" ColumnName="id_kategorii" />
+                <ScalarProperty Name="nazwa_kategorii" ColumnName="nazwa_kategorii" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Klienci">
+            <EntityTypeMapping TypeName="Sklep_papierniczyModel.Klienci">
+              <MappingFragment StoreEntitySet="Klienci">
+                <ScalarProperty Name="id_klienta" ColumnName="id_klienta" />
+                <ScalarProperty Name="imie" ColumnName="imie" />
+                <ScalarProperty Name="nazwisko" ColumnName="nazwisko" />
+                <ScalarProperty Name="telefon" ColumnName="telefon" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pracownicy">
+            <EntityTypeMapping TypeName="Sklep_papierniczyModel.Pracownicy">
+              <MappingFragment StoreEntitySet="Pracownicy">
+                <ScalarProperty Name="id_pracownika" ColumnName="id_pracownika" />
+                <ScalarProperty Name="imie" ColumnName="imie" />
+                <ScalarProperty Name="nazwisko" ColumnName="nazwisko" />
+                <ScalarProperty Name="pesel" ColumnName="pesel" />
+                <ScalarProperty Name="stanowisko" ColumnName="stanowisko" />
+                <ScalarProperty Name="data_zatrudnienia" ColumnName="data_zatrudnienia" />
+                <ScalarProperty Name="telefon" ColumnName="telefon" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Produkty">
+            <EntityTypeMapping TypeName="Sklep_papierniczyModel.Produkty">
+              <MappingFragment StoreEntitySet="Produkty">
+                <ScalarProperty Name="id_produktu" ColumnName="id_produktu" />
+                <ScalarProperty Name="nazwa" ColumnName="nazwa" />
+                <ScalarProperty Name="ilosc" ColumnName="ilosc" />
+                <ScalarProperty Name="cena_brutto" ColumnName="cena_brutto" />
+                <ScalarProperty Name="id_kategorii" ColumnName="id_kategorii" />
+                <ScalarProperty Name="id_dostawcy" ColumnName="id_dostawcy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transakcje">
+            <EntityTypeMapping TypeName="Sklep_papierniczyModel.Transakcje">
+              <MappingFragment StoreEntitySet="Transakcje">
+                <ScalarProperty Name="id_transakcji" ColumnName="id_transakcji" />
+                <ScalarProperty Name="id_produktu" ColumnName="id_produktu" />
+                <ScalarProperty Name="cena_brutto" ColumnName="cena_brutto" />
+                <ScalarProperty Name="ilosc" ColumnName="ilosc" />
+                <ScalarProperty Name="data_transakcji" ColumnName="data_transakcji" />
+                <ScalarProperty Name="id_klienta" ColumnName="id_klienta" />
+                <ScalarProperty Name="id_pracownika" ColumnName="id_pracownika" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
