@@ -10,6 +10,19 @@
         <CollectionViewSource x:Key="klienciViewSource1" d:DesignSource="{d:DesignInstance {x:Type local:Klienci}}"/>
         <CollectionViewSource x:Key="klienciViewSource" d:DesignSource="{d:DesignInstance {x:Type local:Klienci}}"/>
         <CollectionViewSource x:Key="klienciTransakcjeViewSource" Source="{Binding Transakcje, Source={StaticResource klienciViewSource}}"/>
+        <Style x:Key="Label" TargetType="{x:Type Label}" BasedOn="{x:Null}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Height" Value="23"/>
+        </Style>
+        <Style x:Key="CustTextBox" TargetType="{x:Type TextBox}" BasedOn="{x:Null}">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Width" Value="120"/>
+        </Style>
     </Window.Resources>
     <Grid DataContext="{StaticResource klienciTransakcjeViewSource}">
         <Grid.RowDefinitions>
@@ -17,10 +30,10 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid x:Name="grid1" DataContext="{StaticResource klienciViewSource}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="300,200,0,0" Grid.Row="1">
+        <Grid x:Name="klienciGrid" DataContext="{StaticResource klienciViewSource}" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Visible" Background="#FF86B7D0" Margin="5" Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" MinWidth="233"/>
+                <ColumnDefinition Width="Auto" MinWidth="397"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -28,30 +41,96 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Label Grid.Column="0" Content="id klienta:" HorizontalAlignment="Left" Margin="3" Grid.Row="0" VerticalAlignment="Center"/>
-            <TextBox x:Name="id_klientaTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="NaN" Margin="3" Grid.Row="0" Text="{Binding id_klienta, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
-            <Label Grid.Column="0" Content="imie:" HorizontalAlignment="Left" Margin="3" Grid.Row="1" VerticalAlignment="Center"/>
-            <TextBox x:Name="imieTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="NaN" Margin="3" Grid.Row="1" Text="{Binding imie, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
-            <Label Grid.Column="0" Content="nazwisko:" HorizontalAlignment="Left" Margin="3" Grid.Row="2" VerticalAlignment="Center"/>
-            <TextBox x:Name="nazwiskoTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="NaN" Margin="3" Grid.Row="2" Text="{Binding nazwisko, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
-            <Label Grid.Column="0" Content="telefon:" HorizontalAlignment="Left" Margin="3" Grid.Row="3" VerticalAlignment="Center"/>
-            <TextBox x:Name="telefonTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="NaN" Margin="3" Grid.Row="3" Text="{Binding telefon, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
+            <Label Grid.Column="0" Content="ID Klienta:" Grid.Row="0" Style="{StaticResource Label}"/>
+            <TextBox x:Name="id_klientaTextBox" Grid.Column="1" Grid.Row="0" Style="{StaticResource CustTextBox}" Text="{Binding id_klienta, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+            <Label Grid.Column="0" Content="Imie:" Grid.Row="1" Style="{StaticResource Label}" />
+            <TextBox x:Name="imieTextBox" Grid.Column="1" Grid.Row="1" Style="{StaticResource CustTextBox}" Text="{Binding imie, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
+            <Label Grid.Column="0" Content="Nazwisko:" Grid.Row="2" Style="{StaticResource Label}"/>
+            <TextBox x:Name="nazwiskoTextBox" Grid.Column="1" Grid.Row="2" Style="{StaticResource CustTextBox}" Text="{Binding nazwisko, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
+            <Label Grid.Column="0" Content="Telefon:" Grid.Row="3" Style="{StaticResource Label}" />
+            <TextBox x:Name="telefonTextBox" Grid.Column="1" Grid.Row="3" Style="{StaticResource CustTextBox}" Text="{Binding telefon, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
         </Grid>
-        <DataGrid x:Name="transakcjeDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="0,0,0,0" Grid.RowSpan="2" Grid.Row="2">
+        <Grid x:Name="klienciNewGrid" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=newCustomer, UpdateSourceTrigger=Explicit}" Visibility="Collapsed" Background="CornflowerBlue">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="233"/>
+                <ColumnDefinition Width="Auto" MinWidth="397"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Column="0" Content="ID Klienta:" Grid.Row="0" Style="{StaticResource Label}"/>
+            <TextBox x:Name="add_id_klientaTextBox" Grid.Column="1" Grid.Row="0" Style="{StaticResource CustTextBox}" Text="{Binding id_klienta, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+            <Label Grid.Column="0" Content="Imie:" Grid.Row="1" Style="{StaticResource Label}" />
+            <TextBox x:Name="add_imieTextBox" Grid.Column="1" Grid.Row="1" Style="{StaticResource CustTextBox}" Text="{Binding imie, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
+            <Label Grid.Column="0" Content="Nazwisko:" Grid.Row="2" Style="{StaticResource Label}"/>
+            <TextBox x:Name="add_nazwiskoTextBox" Grid.Column="1" Grid.Row="2" Style="{StaticResource CustTextBox}" Text="{Binding nazwisko, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
+            <Label Grid.Column="0" Content="Telefon:" Grid.Row="3" Style="{StaticResource Label}" />
+            <TextBox x:Name="add_telefonTextBox" Grid.Column="1" Grid.Row="3" Style="{StaticResource CustTextBox}" Text="{Binding telefon, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
+        </Grid>
+        <Grid x:Name="transakcjeNewGrid" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" DataContext="{Binding Path=newOrder, Mode=TwoWay}" Visibility="Collapsed" Background="LightGreen">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="233"/>
+                <ColumnDefinition Width="Auto" MinWidth="397"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Content="New Transakcje Form" FontWeight="Bold"/>
+            <Label Content="cena_brutto:" Grid.Row="1" Style="{StaticResource Label}"/>
+            <TextBox x:Name="add_cena_bruttoTextBox" Grid.Row="1" Style="{StaticResource CustTextBox}"
+                  Text="{Binding cena_brutto, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+            <Label Content="data_transakcji:" Grid.Row="2" Style="{StaticResource Label}"/>
+            <DatePicker x:Name="add_data_transakcjiTextBox" Grid.Row="2" HorizontalAlignment="Right" Width="120"
+                 SelectedDate="{Binding data_transakcji, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="id_klienta:" Grid.Row="3" Style="{StaticResource Label}"/>
+            <TextBox x:Name="add_id_klientaTextBox1" Grid.Row="3" Style="{StaticResource CustTextBox}"
+                  Text="{Binding id_klienta, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+            <Label Content="id_pracownika:" Grid.Row="4"  Style="{StaticResource Label}"/>
+            <TextBox x:Name="add_id_pracownikaTextBox"  Grid.Row="4"  Style="{StaticResource CustTextBox}"
+                 Text="{Binding id_pracownika, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+            <Label Content="id_produktu:" Grid.Row="5" Style="{StaticResource Label}"/>
+            <TextBox x:Name="add_id_produktuTextBox"  Grid.Row="5" Style="{StaticResource CustTextBox}"
+                  Text="{Binding id_produktu, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+            <Label Content="id_transakcji"  Grid.Row="6" Style="{StaticResource Label}"/>
+            <TextBox x:Name="add_id_transakcjiTextBox" Grid.Row="6" Style="{StaticResource CustTextBox}"
+                  Text="{Binding id_transakcji, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+            <Label Content="ilosc"  Grid.Row="7" Style="{StaticResource Label}"/>
+            <TextBox x:Name="add_iloscTextBox" Grid.Row="7" Style="{StaticResource CustTextBox}"
+                  Text="{Binding ilosc, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+        </Grid>
+        <DataGrid x:Name="transakcjeDataGrid" SelectionUnit="Cell" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="false" EnableRowVirtualization="True" IsEnabled="True" ItemsSource="{Binding Source={StaticResource klienciTransakcjeViewSource}}" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="10,10,10,10" Grid.RowSpan="2" Grid.Row="2" Width="auto">
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="cena_bruttoColumn" Binding="{Binding cena_brutto}" Header="cena brutto" Width="SizeToHeader"/>
-                <DataGridTemplateColumn x:Name="data_transakcjiColumn" Header="data transakcji" Width="SizeToHeader">
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Delete" Command="{StaticResource DeleteOrderCommand}" CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn x:Name="cena_bruttoColumn" Binding="{Binding cena_brutto}" Header="Cena brutto" Width="SizeToHeader"/>
+                <DataGridTemplateColumn x:Name="data_transakcjiColumn" Header="Data transakcji" Width="SizeToHeader">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DatePicker SelectedDate="{Binding data_transakcji, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn x:Name="id_klientaColumn" Binding="{Binding id_klienta}" Header="id klienta" Width="SizeToHeader"/>
-                <DataGridTextColumn x:Name="id_pracownikaColumn" Binding="{Binding id_pracownika}" Header="id pracownika" Width="SizeToHeader"/>
-                <DataGridTextColumn x:Name="id_produktuColumn" Binding="{Binding id_produktu}" Header="id produktu" Width="SizeToHeader"/>
-                <DataGridTextColumn x:Name="id_transakcjiColumn" Binding="{Binding id_transakcji}" Header="id transakcji" Width="SizeToHeader"/>
-                <DataGridTextColumn x:Name="iloscColumn" Binding="{Binding ilosc}" Header="ilosc" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="id_klientaColumn" Binding="{Binding id_klienta}" Header="ID klienta" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="id_pracownikaColumn" Binding="{Binding id_pracownika}" Header="ID pracownika" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="id_produktuColumn" Binding="{Binding id_produktu}" Header="ID produktu" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="id_transakcjiColumn" Binding="{Binding id_transakcji}" Header="ID transakcji" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="iloscColumn" Binding="{Binding ilosc}" Header="Ilośc" Width="SizeToHeader"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
