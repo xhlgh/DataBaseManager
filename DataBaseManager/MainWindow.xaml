@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataBaseManager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800" Loaded="Window_Loaded">
+        Title="Database Manager" Height="600" Width="800" Loaded="Window_Loaded">
     <Window.Resources>
         <RoutedUICommand x:Key="FirstCommand" Text="First"/>
         <RoutedUICommand x:Key="LastCommand" Text="Last"/>
@@ -22,20 +22,21 @@
         <Style x:Key="Label" TargetType="{x:Type Label}" BasedOn="{x:Null}">
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Height" Value="23"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="FontSize" Value="14"/>
         </Style>
         <Style x:Key="CustTextBox" TargetType="{x:Type TextBox}" BasedOn="{x:Null}">
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Height" Value="26"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Height" Value="30"/>
             <Setter Property="Width" Value="120"/>
         </Style>
         <Style x:Key="NavButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
-            <Setter Property="Margin" Value="2,2,2,0"/>
+            <Setter Property="Margin" Value="1,1,1,1"/>
             <Setter Property="Width" Value="40"/>
             <Setter Property="Height" Value="auto"/>
         </Style>
@@ -62,11 +63,11 @@
             <Button Name="btnPrev" Content="◄" Command="{StaticResource PreviousCommand}" Style="{StaticResource NavButton}"/>
             <Button Name="btnNext" Content="►" Command="{StaticResource NextCommand}" Style="{StaticResource NavButton}"/>
             <Button Name="btnLast" Content="►|" Command="{StaticResource LastCommand}" Style="{StaticResource NavButton}"/>
-            <Button Name="btnDelete" Content="Delete Customer" Command="{StaticResource DeleteCustomerCommand}" FontSize="11" Width="120" Style="{StaticResource NavButton}"/>
-            <Button Name="btnAdd" Content="New Customer" Command="{StaticResource AddCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
-            <Button Content="New Order" Name="btnNewOrder" FontSize="11" Width="80" Style="{StaticResource NavButton}" Click="NewOrder_click"/>
-            <Button Name="btnUpdate" Content="Commit" Command="{StaticResource UpdateCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
-            <Button Content="Cancel" Name="btnCancel" Command="{StaticResource CancelCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
+            <Button Name="btnDelete" Content="Usuń klienta" Command="{StaticResource DeleteCustomerCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
+            <Button Name="btnAdd" Content="Nowy klient" Command="{StaticResource AddCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
+            <Button Content="Nowa transakcja" Name="btnNewOrder" FontSize="11" Width="100" Style="{StaticResource NavButton}" Click="NewOrder_click"/>
+            <Button Name="btnUpdate" Content="Akceptuj" Command="{StaticResource UpdateCommand}" FontSize="11" Width="60" Style="{StaticResource NavButton}"/>
+            <Button Content="Anuluj" Name="btnCancel" Command="{StaticResource CancelCommand}" FontSize="11" Width="60" Style="{StaticResource NavButton}"/>
         </StackPanel>
         <Grid x:Name="klienciGrid" DataContext="{StaticResource klienciViewSource}" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Visible" Background="#FF86B7D0" Margin="5" Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -81,14 +82,14 @@
             </Grid.RowDefinitions>
             <Label Grid.Column="0" Content="ID Klienta:" Grid.Row="0" Style="{StaticResource Label}"/>
             <TextBox x:Name="id_klientaTextBox" Grid.Column="1" Grid.Row="0" Style="{StaticResource CustTextBox}" Text="{Binding id_klienta, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
-            <Label Grid.Column="0" Content="Imie:" Grid.Row="1" Style="{StaticResource Label}" />
+            <Label Grid.Column="0" Content="Imię:" Grid.Row="1" Style="{StaticResource Label}" />
             <TextBox x:Name="imieTextBox" Grid.Column="1" Grid.Row="1" Style="{StaticResource CustTextBox}" Text="{Binding imie, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
             <Label Grid.Column="0" Content="Nazwisko:" Grid.Row="2" Style="{StaticResource Label}"/>
             <TextBox x:Name="nazwiskoTextBox" Grid.Column="1" Grid.Row="2" Style="{StaticResource CustTextBox}" Text="{Binding nazwisko, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
             <Label Grid.Column="0" Content="Telefon:" Grid.Row="3" Style="{StaticResource Label}" />
             <TextBox x:Name="telefonTextBox" Grid.Column="1" Grid.Row="3" Style="{StaticResource CustTextBox}" Text="{Binding telefon, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
         </Grid>
-        <Grid x:Name="klienciNewGrid" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=newCustomer, UpdateSourceTrigger=Explicit}" Visibility="Collapsed" Background="CornflowerBlue">
+        <Grid x:Name="klienciNewGrid" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=newCustomer, UpdateSourceTrigger=Explicit}" Visibility="Collapsed" Background="#FF57869E">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" MinWidth="233"/>
                 <ColumnDefinition Width="Auto" MinWidth="397"/>
@@ -110,7 +111,7 @@
             <Label Grid.Column="0" Content="Telefon:" Grid.Row="3" Style="{StaticResource Label}" />
             <TextBox x:Name="add_telefonTextBox" Grid.Column="1" Grid.Row="3" Style="{StaticResource CustTextBox}" Text="{Binding telefon, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
         </Grid>
-        <Grid x:Name="transakcjeNewGrid" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" DataContext="{Binding Path=newOrder, Mode=TwoWay}" Visibility="Collapsed" Background="LightGreen">
+        <Grid x:Name="transakcjeNewGrid" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" DataContext="{Binding Path=newOrder, Mode=TwoWay}" Visibility="Collapsed" Background="#FF57869E">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" MinWidth="233"/>
                 <ColumnDefinition Width="Auto" MinWidth="397"/>
@@ -148,7 +149,7 @@
             <TextBox x:Name="add_iloscTextBox" Grid.Row="7" Style="{StaticResource CustTextBox}"
                   Text="{Binding ilosc, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
         </Grid>
-        <DataGrid x:Name="transakcjeDataGrid" SelectionUnit="Cell" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="false" EnableRowVirtualization="True" IsEnabled="True" ItemsSource="{Binding Source={StaticResource klienciTransakcjeViewSource}}" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="10,10,10,10" Grid.RowSpan="2" Grid.Row="2" Width="auto">
+        <DataGrid x:Name="transakcjeDataGrid" SelectionUnit="Cell" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="false" EnableRowVirtualization="True" IsEnabled="True" ItemsSource="{Binding Source={StaticResource klienciTransakcjeViewSource}}" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="10,60,10,10" Grid.Row="2" Width="auto">
             <DataGrid.Columns>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
