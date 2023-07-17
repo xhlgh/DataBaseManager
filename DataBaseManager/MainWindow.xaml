@@ -123,13 +123,14 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Label Content="New Transakcje Form" FontWeight="Bold"/>
             <Label Content="cena_brutto:" Grid.Row="1" Style="{StaticResource Label}"/>
             <TextBox x:Name="add_cena_bruttoTextBox" Grid.Row="1" Style="{StaticResource CustTextBox}"
                   Text="{Binding cena_brutto, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
             <Label Content="data_transakcji:" Grid.Row="2" Style="{StaticResource Label}"/>
-            <DatePicker x:Name="add_data_transakcjiTextBox" Grid.Row="2" HorizontalAlignment="Right" Width="120"
+            <DatePicker x:Name="add_data_transakcjiDatePicker" Grid.Row="2" HorizontalAlignment="Right" Width="120"
                  SelectedDate="{Binding data_transakcji, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"/>
             <Label Content="id_klienta:" Grid.Row="3" Style="{StaticResource Label}"/>
             <TextBox x:Name="add_id_klientaTextBox1" Grid.Row="3" Style="{StaticResource CustTextBox}"
