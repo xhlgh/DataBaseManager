@@ -69,7 +69,7 @@
             <Button Name="btnUpdate" Content="Akceptuj" Command="{StaticResource UpdateCommand}" FontSize="11" Width="60" Style="{StaticResource NavButton}"/>
             <Button Content="Anuluj" Name="btnCancel" Command="{StaticResource CancelCommand}" FontSize="11" Width="60" Style="{StaticResource NavButton}"/>
         </StackPanel>
-        <Grid x:Name="klienciGrid" DataContext="{StaticResource klienciViewSource}" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Visible" Background="#FF86B7D0" Margin="5" Grid.Row="1">
+        <Grid x:Name="klienciGrid" DataContext="{StaticResource klienciViewSource}" VerticalAlignment="Top" Visibility="Visible" Background="#FF86B7D0" Margin="5" Grid.Row="1" HorizontalAlignment="Left">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" MinWidth="233"/>
                 <ColumnDefinition Width="Auto" MinWidth="397"/>
@@ -80,7 +80,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Label Grid.Column="0" Content="ID Klienta:" Grid.Row="0" Style="{StaticResource Label}"/>
+            <Label Grid.Column="0" Content="ID Klienta:" Grid.Row="0" Style="{StaticResource Label}" HorizontalAlignment="Left"/>
             <TextBox x:Name="id_klientaTextBox" Grid.Column="1" Grid.Row="0" Style="{StaticResource CustTextBox}" Text="{Binding id_klienta, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
             <Label Grid.Column="0" Content="Imię:" Grid.Row="1" Style="{StaticResource Label}" />
             <TextBox x:Name="imieTextBox" Grid.Column="1" Grid.Row="1" Style="{StaticResource CustTextBox}" Text="{Binding imie, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>

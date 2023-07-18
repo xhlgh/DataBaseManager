@@ -32,6 +32,7 @@ namespace DataBaseManager
             DataContext = this; 
         }
 
+        //Przyciski odpowiadające za przełączanie się między danymi
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             context.Klienci.Load();
@@ -59,10 +60,9 @@ namespace DataBaseManager
             klienciViewSource.View.MoveCurrentToFirst();
         }
 
+        //przycisk odpowiadający za usunięcie klienta
         private void DeleteCustomerCommandHandler(object sender, ExecutedRoutedEventArgs e)
         {
-            // If existing window is visible, delete the customer and all their orders.  
-            // In a real application, you should add warnings and allow the user to cancel the operation.  
             var cur = klienciViewSource.View.CurrentItem as Klienci;
 
             var cust = (from c in context.Klienci
@@ -80,15 +80,12 @@ namespace DataBaseManager
             context.SaveChanges();
             klienciViewSource.View.Refresh();
         }
-
-        // Commit changes from the new customer form, the new order form,  
-        // or edits made to the existing customer form.  
+        
+        //przyciski odpowiadające za dodawamie klientów i transakcji
         private void UpdateCommandHandler(object sender, ExecutedRoutedEventArgs e)
         {
             if (klienciNewGrid.IsVisible)
             {
-                // Create a new object because the old one  
-                // is being tracked by EF now.  
                 Klienci newCustomer = new Klienci()
                 {
                     id_klienta = Int32.Parse(add_id_klientaTextBox.Text),
@@ -97,10 +94,8 @@ namespace DataBaseManager
                     telefon = add_telefonTextBox.Text,
                 };
 
-                // Perform very basic validation  
                     if (newCustomer.telefon.Length == 9 || newCustomer.imie != null || newCustomer.nazwisko != null)
                     {
-                        // Insert the new customer at correct position:  
                         int len = context.Klienci.Local.Count();
                         int pos = len;
                         for (int i = 0; i < len; ++i)
@@ -125,9 +120,6 @@ namespace DataBaseManager
             }
             else if (transakcjeNewGrid.IsVisible)
             {
-                // Order ID is auto-generated so we don't set it here.  
-                // For CustomerID, address, etc we use the values from current customer.  
-                // User can modify these in the datagrid after the order is entered.  
 
                 Klienci currentCustomer = (Klienci)klienciViewSource.View.CurrentItem;
 
@@ -192,25 +184,20 @@ namespace DataBaseManager
                     return;
                 }
 
-                // Add the order into the EF model  
                 context.Transakcje.Add(newOrder);
                 transakcjeViewSource.View.Refresh();
             }
 
-            // Save the changes, either for a new customer, a new order  
-            // or an edit to an existing customer or order.
             context.SaveChanges();
         }
 
-        // Sets up the form so that user can enter data. Data is later  
-        // saved when user clicks Commit.  
         private void AddCommandHandler(object sender, ExecutedRoutedEventArgs e)
         {
             klienciGrid.Visibility = Visibility.Collapsed;
             transakcjeNewGrid.Visibility = Visibility.Collapsed;
             klienciNewGrid.Visibility = Visibility.Visible;
 
-            // Clear all the text boxes before adding a new customer.  
+
             foreach (var child in klienciNewGrid.Children)
             {
                 var tb = child as TextBox;
@@ -236,7 +223,7 @@ namespace DataBaseManager
             transakcjeNewGrid.Visibility = Visibility.Visible;
         }
 
-        // Cancels any input into the new customer form  
+        //anulowanie
         private void CancelCommandHandler(object sender, ExecutedRoutedEventArgs e)
         {
             add_cena_bruttoTextBox.Text = "";
@@ -250,32 +237,21 @@ namespace DataBaseManager
             klienciNewGrid.Visibility = Visibility.Collapsed;
             transakcjeNewGrid.Visibility = Visibility.Collapsed;
         }
-
+        //usuwanie
         private void Delete_Order(Transakcje order)
         {
-            // Find the order in the EF model.  
             var ord = (from o in context.Transakcje.Local
                        where o.id_transakcji == order.id_transakcji
                        select o).FirstOrDefault();
 
-            // Delete all the order_details that have  
-            // this Order as a foreign key  
-            //foreach (var detail in ord.Order_Details.ToList())
-            //{
-            //    context.Order_Details.Remove(detail);
-            //}
-
-            // Now it's safe to delete the order.  
             context.Transakcje.Remove(ord);
             context.SaveChanges();
 
-            // Update the data grid.  
             transakcjeViewSource.View.Refresh();
         }
 
         private void DeleteOrderCommandHandler(object sender, ExecutedRoutedEventArgs e)
         {
-            // Get the Order in the row in which the Delete button was clicked.  
             Transakcje obj = e.Parameter as Transakcje;
             Delete_Order(obj);
         }
